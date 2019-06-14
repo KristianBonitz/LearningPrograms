@@ -4,3 +4,7 @@ python/hamming/__pycache__/
 LearningPrograms/
 
 Exercism/
+
+swift/\.DS_Store
+
+\.DS_Store
