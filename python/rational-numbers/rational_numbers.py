@@ -1,5 +1,10 @@
 from __future__ import division
 
+# find greatest common denominator of a & b
+def find_gcd(a, b):
+    while b:
+        a, b = b, a % b
+    return a
 
 class Rational(object):
     def __init__(self, numer, denom):
@@ -27,37 +32,20 @@ class Rational(object):
         return Rational(abs(self.numer), abs(self.denom))
 
     def __pow__(self, power):
-        return Rational(self.numer ** power, self.denom ** power)
+        if power > 0:
+            return Rational(self.numer ** power, self.denom ** power)
+        else:
+            return Rational(self.denom ** power, self.numer ** power)
 
     def __rpow__(self, base):
         return base ** (self.numer / self.denom)
 
     def _reduce(self, numer, denom):
-        if numer == 0:
-            return 0, 1
-        elif numer == denom:
-            return 1, 1 
-        elif denom == 0:
+        if denom == 0:
             raise ValueError("Cannot have 0 denominator")
 
-        #See which one is higher
-        hcd = 1
-        if abs(numer) > abs(denom):
-            hcd = abs(denom)
-        else:
-            hcd = abs(numer)
-
-        #figure out highest common denominator 
-        while numer % hcd != 0 or denom % hcd != 0:
-            hcd -= 1
-
-        if hcd > 1:
-            numer /= hcd
-            denom /= hcd
-
-        #adjust minus
-        if denom < 0:
-            denom *= -1
-            numer *= -1
+        gcd = find_gcd(numer, denom)
+        numer /= gcd
+        denom /= gcd
 
         return int(numer), int(denom)
