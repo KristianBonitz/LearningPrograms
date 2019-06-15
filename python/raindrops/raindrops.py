@@ -1,16 +1,8 @@
 def convert(number):
-	response = ''
 
-	if number % 3 == 0:
-		response += 'Pling'
+	response  = ''
+	response += 'Pling' if number % 3 == 0 else '' 
+	response += 'Plang' if number % 5 == 0 else ''
+	response += 'Plong' if number % 7 == 0 else ''
 
-	if number % 5 == 0:
-		response += 'Plang'
-
-	if number % 7 == 0:
-		response += 'Plong'
-
-	if response == '':
-		return str(number)
-	else:
-		return response
+	return response if response != '' else str(number)
