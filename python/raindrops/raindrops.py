@@ -5,4 +5,4 @@ def convert(number):
 	response += 'Plang' if number % 5 == 0 else ''
 	response += 'Plong' if number % 7 == 0 else ''
 
-	return response if response != '' else str(number)
+	return str(number) if response == '' else response
