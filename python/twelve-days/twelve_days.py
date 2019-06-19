@@ -1,15 +1,15 @@
-END_VERSES = ["twelve Drummers Drumming, ",
-                    "eleven Pipers Piping, ",
-                    "ten Lords-a-Leaping, ",
-                    "nine Ladies Dancing, ",
-                    "eight Maids-a-Milking, ",
-                    "seven Swans-a-Swimming, ",
-                    "six Geese-a-Laying, ",
-                    "five Gold Rings, ",
-                    "four Calling Birds, ",
-                    "three French Hens, ",
-                    "two Turtle Doves, ",
-                    "and a Partridge in a Pear Tree."]
+END_VERSES = ["and a Partridge in a Pear Tree.",
+				"two Turtle Doves, ",
+				"three French Hens, ",
+				"four Calling Birds, ",
+				"five Gold Rings, ",
+				"six Geese-a-Laying, ",
+				"seven Swans-a-Swimming, ",
+				"eight Maids-a-Milking, ",
+				"nine Ladies Dancing, ",
+				"ten Lords-a-Leaping, ",
+				"eleven Pipers Piping, ",
+				"twelve Drummers Drumming, "]
 
 ORD_NUMBER = ["first",
 				"second",
@@ -25,12 +25,14 @@ ORD_NUMBER = ["first",
 				"twelfth"]
 
 def recite(start_verse, end_verse):
-	verse = ""
-	for line in range(start_verse, end_verse+1):
-		verse = f"On the {ORD_NUMBER[line-1]} day of Christmas my true love gave to me: "
-		if line == 1:
-			verse += "a Partridge in a Pear Tree."
-		else:
-			verse += "".join(END_VERSES[12-line:12])
+	song = []
 
-	return [verse]
+	for v in range(start_verse-1, end_verse):
+		line = f"On the {ORD_NUMBER[v]} day of Christmas my true love gave to me: "
+		if v == 0:
+			line += "a Partridge in a Pear Tree."
+		else:
+			line += "".join(END_VERSES[v::-1])
+		song.append(line)
+
+	return song
