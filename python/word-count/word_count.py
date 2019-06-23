@@ -1,13 +1,10 @@
 import re
 
 def count_words(sentence):
-	#format sentence to remove non-words and seperate words
-	words = re.findall(r"(?<!\\)[a-z0-9]+", sentence.lower())
-	print(words)
-	#words = sentence.lower().split(r' ')
-	#count the number of words in sentence
+	words = re.findall(r"(?<!\\)([a-zA-Z0-9]+('[a-zA-Z0-9]+)*)", sentence.lower())	
+	# returns as a list of tuples that need to be parsed out
 	word_count = {}
 	for word in words:
-		word_count[word] = words.count(word)
+		word_count[word[0]] = words.count(word)
 	
 	return word_count
