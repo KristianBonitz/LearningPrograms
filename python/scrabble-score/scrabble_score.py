@@ -1,25 +1,17 @@
-SCRABBLE_SCORING_GROUPS = [
-    {'letters' : ['A', 'E', 'I', 'O', 'U', 'L', 'N', 'R', 'S', 'T'],
-     'score': 1},
-    {'letters': ['D', 'G'],
-     'score': 2},
-    {'letters': ['B', 'C', 'M', 'P'],
-     'score': 3},
-    {'letters': ['F', 'H', 'V', 'W', 'Y'],
-     'score': 4},
-    {'letters': ['K'],
-     'score': 5},
-    {'letters': ['J', 'X'],
-     'score': 8},
-    {'letters': ['Z', 'Q'],
-     'score': 10}
-]
-def score(word):
-    word_value = 0
-    for letter in word.upper():
-        for group in SCRABBLE_SCORING_GROUPS:
-            if letter in group['letters']:
-                word_value += group['score']
-                break
+SCRABBLE_SCORING_GROUPS = {  
+    # Letter : Value
+    'A':1, 'E':1, 'I':1, 'O':1, 'U':1, 'L':1, 'N':1, 
+    'R':1, 'S':1, 'T':1, 'D':2, 'G':2, 'B':3, 'C':3, 
+    'M':3, 'P':3, 'F':4, 'H':4, 'V':4, 'W':4, 'Y':4,
+    'K':5, 'J':8, 'X':8, 'Z':10, 'Q':10
+}
 
-    return word_value
+def score(word):
+    return sum(map(letter_value, word.upper()))
+
+def letter_value(char, scoring_group=SCRABBLE_SCORING_GROUPS):
+    # return value of character
+    if char in scoring_group: 
+        return scoring_group[char] 
+    else: 
+        return 0

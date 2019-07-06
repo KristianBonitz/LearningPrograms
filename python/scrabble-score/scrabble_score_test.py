@@ -36,6 +36,9 @@ class ScrabbleScoreTest(unittest.TestCase):
     def test_empty_input(self):
         self.assertEqual(score(""), 0)
 
+    def test_space_input(self):
+        self.assertEqual(score(" "), 0)
+
     def test_entire_alphabet_available(self):
         self.assertEqual(score("abcdefghijklmnopqrstuvwxyz"), 87)
 
