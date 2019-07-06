@@ -36,7 +36,7 @@ def parse(input_string):
     # does input handle both: re.match(r";*[A-Z]+(\[\w+\])+")
     # and re.split(r"([\(\)\;\[\]])", input_string)
 
-    input = re.split(r"([\(\)\;\[\]])", input_string)
+    input = re.split(r"(?<!\\)([\(\)\;\[\]])", input_string)
     #print(input)
     result, lenght = assemble(input)
     return result
@@ -59,7 +59,7 @@ def assemble(input_array, pos=4):
             pos += 1
             value.append( input_array[pos] )
 
-        elif input_array[pos] == '' or  re.match(r"[\(\)\]\[]", input_array[pos]):
+        elif input_array[pos] == '' or  re.match(r"(?<!\\)[\(\)\]\[]", input_array[pos]):
             pass
 
         elif re.match(r"^[A-Z]*$", input_array[pos]): #is key
@@ -93,7 +93,7 @@ def assemble(input_array, pos=4):
 #FF[4]D[22];CC[32])")
 
 #TEST CASES
-#parse("(;FF[4]E[22][RR](;EF[23])(;EG[22]))")
-#parse("(;A[\\]b\nc\nd\t\te \n\\]])")
+parse("(;FF[4]E[22][RR](;EF[23])(;EG[22]))")
+parse("(;A[\\]b\nc\nd\t\te \n\\]])")
 #parse("(;Aa[b])")
 
