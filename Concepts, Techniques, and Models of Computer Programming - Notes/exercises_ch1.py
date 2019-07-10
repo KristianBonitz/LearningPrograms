@@ -112,7 +112,6 @@ def op_list(operation, row_left, row_right):
 adding = lambda a, b: a + b 
 multiply = lambda a, b: (a+1) * (b+1)
 doubling = lambda a, b: (a + b) * 2
+modible = lambda a, b: (a + b) % (b + 1)
 
-print(generic_pascal(adding, 11))
-
-print(generic_pascal(doubling, 10))
+print(generic_pascal(modible, 10))
