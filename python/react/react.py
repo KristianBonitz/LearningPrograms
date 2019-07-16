@@ -3,14 +3,18 @@ class InputCell(object):
 		self.value = initial_value
 
 
+# requires some update system to be implemented
 class ComputeCell(object):
 	def __init__(self, inputs, compute_function):
-		callback = compute_function([i.value for i in inputs])
-		#print(compute_function(inputs.value))
-		self.value = next(callback)
+		self.function = compute_function
+		self.inputs = inputs
 
 	def add_callback(self, callback):
 		pass
 
 	def remove_callback(self, callback):
 		pass
+
+	@property
+	def value(self):
+		return self.function([i.value for i in self.inputs])
