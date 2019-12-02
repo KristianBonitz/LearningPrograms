@@ -114,4 +114,7 @@ multiply = lambda a, b: (a+1) * (b+1)
 doubling = lambda a, b: (a + b) * 2
 modible = lambda a, b: (a + b) % (b + 1)
 
-print(generic_pascal(modible, 10))
+#print(generic_pascal(modible, 10))
+
+# Exercise 1.9 - Memory Store
+

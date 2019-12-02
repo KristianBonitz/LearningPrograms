@@ -26,74 +26,74 @@ class SgfTree(object):
     def __ne__(self, other):
         return not self == other
 
-#### 28 May -- Unable to figure out how to handle escaped characters.
-#### Will now try and start cleaning up the script a bit more with better up front handling.
-
 def parse(input_string):
-    # Split on capturing (; or [\w*]
-    # checking that it is in the format ;key[value]
 
-    # does input handle both: re.match(r";*[A-Z]+(\[\w+\])+")
-    # and re.split(r"([\(\)\;\[\]])", input_string)
+    if re.search(r"\(;", input_string) == None:
+        raise ValueError("Incorrect Value")
 
-    input = re.split(r"(?<!\\)([\(\)\;\[\]])", input_string)
-    #print(input)
-    result, lenght = assemble(input)
+    # divide into branches based on (; & )
+    input = re.split(r"(\(;|\)|;)", input_string)
+
+    result, lenght = create_branch(input)
     return result
-    
-    
-def assemble(input_array, pos=4):
+
+# confirm elements with: 
+def is_valid_property(input):
+    return re.match(r"[A-Z]+(\[\w+\])+", input)
+
+def create_properties(property_string):
     properties = {}
-    children = []
     key = ''
     value = []
 
-    while pos < len(input_array) and ')' not in input_array[pos]:
+    property_array = re.split(r"(\[\w+\])", property_string)
 
-        if ';' in input_array[pos]: #loop to allow for more children
-            pos += 1
-            child, pos = assemble(input_array, pos)
-            children.append(child)
+    for item in property_array:
+        if item == '':
+            pass
+        elif '[' in item:
+            value.append(item.strip('[]'))
+        elif key != '':
+            #complete property
+            properties[key] = value
+            #start new property
+            key = item
+            value = []
+        else:
+            key = item
+    
+    properties[key] = value
+    return properties
 
-        elif '[' in input_array[pos]: #is value
-            pos += 1
-            value.append( input_array[pos] )
-
-        elif input_array[pos] == '' or  re.match(r"(?<!\\)[\(\)\]\[]", input_array[pos]):
+def create_branch(input_array, pos=2):
+    properties = {}
+    children = []
+    #step through input, generating properties and children as needed.
+    while pos < len(input_array) and input_array[pos] != ')':
+        value = input_array[pos]
+        if value == '':
             pass
 
-        elif re.match(r"^[A-Z]*$", input_array[pos]): #is key
-            if key != '':
-                properties[key] = value
-                value = [];
+        elif ';' in value:
+            #create child, move pos 1 space.
+            child, pos = create_branch(input_array, pos+1)
+            children.append(child)
 
-            key = input_array[pos]
+        elif is_valid_property(value):
+            properties = create_properties(value)
 
         else:
-            print(input_array[pos])
-            raise ValueError(input_array[pos], "contains invalid characters")
+            raise ValueError(value, "is invalid value")
+
         pos += 1
 
-    if len(value) == 0:
-        raise ValueError(key, "does not have any values")
-    properties[key] = value
     print(properties, children)
-    
-    if properties == {'':[]}:
-        raise ValueError(input_array, "is invalid")
-    elif children == []:
+    if children == []:
         return SgfTree(properties), pos
     else:
-        return SgfTree(properties, children), pos
+        return SgfTree(properties, children), pos 
 
 # Get input
 # read first ';'
 # break at second ';'
 # take each key with their value and create a property value from it
-#FF[4]D[22];CC[32])")
-
-#TEST CASES
-parse("(;FF[4]E[22][RR](;EF[23])(;EG[22]))")
-parse("(;A[\\]b\nc\nd\t\te \n\\]])")
-#parse("(;Aa[b])")
-
