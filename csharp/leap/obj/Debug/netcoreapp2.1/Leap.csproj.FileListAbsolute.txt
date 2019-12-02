@@ -1,0 +1,14 @@
+/Users/kristianbonitz/LearningPrograms/csharp/leap/obj/Debug/netcoreapp2.1/Leap.csprojAssemblyReference.cache
+/Users/kristianbonitz/LearningPrograms/csharp/leap/obj/Debug/netcoreapp2.1/Leap.csproj.CoreCompileInputs.cache
+/Users/kristianbonitz/LearningPrograms/csharp/leap/obj/Debug/netcoreapp2.1/Leap.AssemblyInfoInputs.cache
+/Users/kristianbonitz/LearningPrograms/csharp/leap/obj/Debug/netcoreapp2.1/Leap.AssemblyInfo.cs
+/Users/kristianbonitz/LearningPrograms/csharp/leap/bin/Debug/netcoreapp2.1/xunit.runner.visualstudio.dotnetcore.testadapter.dll
+/Users/kristianbonitz/LearningPrograms/csharp/leap/bin/Debug/netcoreapp2.1/xunit.runner.reporters.netcoreapp10.dll
+/Users/kristianbonitz/LearningPrograms/csharp/leap/bin/Debug/netcoreapp2.1/xunit.runner.utility.netcoreapp10.dll
+/Users/kristianbonitz/LearningPrograms/csharp/leap/bin/Debug/netcoreapp2.1/Leap.deps.json
+/Users/kristianbonitz/LearningPrograms/csharp/leap/bin/Debug/netcoreapp2.1/Leap.runtimeconfig.json
+/Users/kristianbonitz/LearningPrograms/csharp/leap/bin/Debug/netcoreapp2.1/Leap.runtimeconfig.dev.json
+/Users/kristianbonitz/LearningPrograms/csharp/leap/bin/Debug/netcoreapp2.1/Leap.dll
+/Users/kristianbonitz/LearningPrograms/csharp/leap/bin/Debug/netcoreapp2.1/Leap.pdb
+/Users/kristianbonitz/LearningPrograms/csharp/leap/obj/Debug/netcoreapp2.1/Leap.dll
+/Users/kristianbonitz/LearningPrograms/csharp/leap/obj/Debug/netcoreapp2.1/Leap.pdb

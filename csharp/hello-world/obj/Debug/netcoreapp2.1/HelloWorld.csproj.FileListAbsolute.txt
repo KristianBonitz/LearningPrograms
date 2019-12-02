@@ -1,0 +1,14 @@
+/Users/kristianbonitz/LearningPrograms/csharp/hello-world/obj/Debug/netcoreapp2.1/HelloWorld.csprojAssemblyReference.cache
+/Users/kristianbonitz/LearningPrograms/csharp/hello-world/obj/Debug/netcoreapp2.1/HelloWorld.csproj.CoreCompileInputs.cache
+/Users/kristianbonitz/LearningPrograms/csharp/hello-world/obj/Debug/netcoreapp2.1/HelloWorld.AssemblyInfoInputs.cache
+/Users/kristianbonitz/LearningPrograms/csharp/hello-world/obj/Debug/netcoreapp2.1/HelloWorld.AssemblyInfo.cs
+/Users/kristianbonitz/LearningPrograms/csharp/hello-world/bin/Debug/netcoreapp2.1/xunit.runner.visualstudio.dotnetcore.testadapter.dll
+/Users/kristianbonitz/LearningPrograms/csharp/hello-world/bin/Debug/netcoreapp2.1/xunit.runner.reporters.netcoreapp10.dll
+/Users/kristianbonitz/LearningPrograms/csharp/hello-world/bin/Debug/netcoreapp2.1/xunit.runner.utility.netcoreapp10.dll
+/Users/kristianbonitz/LearningPrograms/csharp/hello-world/bin/Debug/netcoreapp2.1/HelloWorld.deps.json
+/Users/kristianbonitz/LearningPrograms/csharp/hello-world/bin/Debug/netcoreapp2.1/HelloWorld.runtimeconfig.json
+/Users/kristianbonitz/LearningPrograms/csharp/hello-world/bin/Debug/netcoreapp2.1/HelloWorld.runtimeconfig.dev.json
+/Users/kristianbonitz/LearningPrograms/csharp/hello-world/bin/Debug/netcoreapp2.1/HelloWorld.dll
+/Users/kristianbonitz/LearningPrograms/csharp/hello-world/bin/Debug/netcoreapp2.1/HelloWorld.pdb
+/Users/kristianbonitz/LearningPrograms/csharp/hello-world/obj/Debug/netcoreapp2.1/HelloWorld.dll
+/Users/kristianbonitz/LearningPrograms/csharp/hello-world/obj/Debug/netcoreapp2.1/HelloWorld.pdb

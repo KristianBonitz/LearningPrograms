@@ -1,0 +1,14 @@
+/Users/kristianbonitz/LearningPrograms/csharp/hamming/obj/Debug/netcoreapp2.1/Hamming.csprojAssemblyReference.cache
+/Users/kristianbonitz/LearningPrograms/csharp/hamming/obj/Debug/netcoreapp2.1/Hamming.csproj.CoreCompileInputs.cache
+/Users/kristianbonitz/LearningPrograms/csharp/hamming/obj/Debug/netcoreapp2.1/Hamming.AssemblyInfoInputs.cache
+/Users/kristianbonitz/LearningPrograms/csharp/hamming/obj/Debug/netcoreapp2.1/Hamming.AssemblyInfo.cs
+/Users/kristianbonitz/LearningPrograms/csharp/hamming/bin/Debug/netcoreapp2.1/xunit.runner.visualstudio.dotnetcore.testadapter.dll
+/Users/kristianbonitz/LearningPrograms/csharp/hamming/bin/Debug/netcoreapp2.1/xunit.runner.reporters.netcoreapp10.dll
+/Users/kristianbonitz/LearningPrograms/csharp/hamming/bin/Debug/netcoreapp2.1/xunit.runner.utility.netcoreapp10.dll
+/Users/kristianbonitz/LearningPrograms/csharp/hamming/bin/Debug/netcoreapp2.1/Hamming.deps.json
+/Users/kristianbonitz/LearningPrograms/csharp/hamming/bin/Debug/netcoreapp2.1/Hamming.runtimeconfig.json
+/Users/kristianbonitz/LearningPrograms/csharp/hamming/bin/Debug/netcoreapp2.1/Hamming.runtimeconfig.dev.json
+/Users/kristianbonitz/LearningPrograms/csharp/hamming/bin/Debug/netcoreapp2.1/Hamming.dll
+/Users/kristianbonitz/LearningPrograms/csharp/hamming/bin/Debug/netcoreapp2.1/Hamming.pdb
+/Users/kristianbonitz/LearningPrograms/csharp/hamming/obj/Debug/netcoreapp2.1/Hamming.dll
+/Users/kristianbonitz/LearningPrograms/csharp/hamming/obj/Debug/netcoreapp2.1/Hamming.pdb
