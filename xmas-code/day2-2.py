@@ -29,6 +29,7 @@ def run_program(program):
 
     return program
 
+#todo: pass program by reference
 def find_verb_noun(program, find_result):
     verb = 0
     noun = 0
