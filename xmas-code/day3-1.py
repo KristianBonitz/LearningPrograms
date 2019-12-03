@@ -1,6 +1,6 @@
 ##Create a grid that expands
 
-start_grid = [[-1]]
+start_grid = [[8]]
 
 #add row 
 
@@ -50,12 +50,35 @@ def print_grid(grid,x,y):
 		print(z)
 	print('--',x,y,'--')
 
+def find_start(grid):
+	for y in range(0, len(grid)):
+		for x in range(0, len(grid[y])):
+			if grid[y][x] == 8:
+				return [y, x]
+	return -1
+
+def lay_pipe(grid, instructions):
+	commands = instructions.split(',')
+	pos_y,	pos_x = find_start(grid)
+	
+	for m in commands:
+		direction = m[0]
+		for i in range(0,int(m[1:])-1):
+			if direction == 'R':
+				grid, pos_x, pos_y = move_right(grid, pos_x, pos_y)
+			elif direction == 'L':
+				grid, pos_x, pos_y = move_left(grid, pos_x, pos_y)
+			elif direction == 'U':
+				grid, pos_x, pos_y = move_up(grid, pos_x, pos_y)
+			elif direction == 'D':
+				grid, pos_x, pos_y = move_down(grid, pos_x, pos_y)
+		
+	print_grid(grid, pos_x, pos_y)
 
 
-print_grid(*move_up(start_grid,0,0))
-print_grid(*move_left(start_grid,0,0))
-print_grid(*move_down(start_grid,0,0))
-print_grid(*move_down(start_grid,0,1))
-print_grid(*move_right(start_grid,0,2))
+
+
+lay_pipe(start_grid, 'U7,R6,D4,L4')
+lay_pipe(start_grid, 'R8,U5,L5,D3')
 
 
