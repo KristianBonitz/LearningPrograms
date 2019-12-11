@@ -89,13 +89,10 @@ def run_program(program, p_input):
         
         op_code, a_mode, b_mode, c_mode = parse_cmd(program[i])
 
-    return output
-
 def parse_cmd(cmd_str):
     cmd_arr = str(cmd_str)
     for _ in range(0,5-len(cmd_arr)):
         cmd_arr = '0' + cmd_arr
-    print(''.join(cmd_arr))
 
     return int(cmd_arr[-2] + cmd_arr[-1]), int(cmd_arr[-3]), int(cmd_arr[-4]), int(cmd_arr[-5])
 
