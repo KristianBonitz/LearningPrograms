@@ -4,97 +4,96 @@ inputs = [[0, 1, 2, 3, 4], [1, 0, 2, 3, 4], [1, 2, 0, 3, 4], [1, 2, 3, 0, 4], [1
 
 p_input = 5
 
-def m(mode, value, array):
-    if mode == 1:
-        return value
-    else: 
-        return array[value]
+class Intcode_Computer(object):
+    """docstring for Intcode_Computer"""
+    def __init__(self, program, sys_input):
+        super(Intcode_Computer, self).__init__()
+        self.input = [*sys_input] if type(sys_input) == list else [sys_input]
+        self.i = 0
+        self.output = 0
+        self.r_base = 0
+        self.program = program
 
-def add_fun(a_mode, b_mode, c_mode, add1, add2, res, array):
-    array[res] = m(a_mode, add1, array) + m(b_mode, add2, array)
-    return array
+    def parse_cmd(self, cmd_str):
+        cmd_arr = str(cmd_str)
+        for _ in range(0,5-len(cmd_arr)):
+            cmd_arr = '0' + cmd_arr
 
-def multi_fun(a_mode, b_mode, c_mode, add1, add2, res, array):
-    array[res] = m(a_mode, add1, array) * m(b_mode, add2, array)
-    return array
+        return int(cmd_arr[-2] + cmd_arr[-1]), int(cmd_arr[-3]), int(cmd_arr[-4]), int(cmd_arr[-5])
 
-def less_fun(a_mode, b_mode, c_mode, add1, add2, res, array):
-    if m(a_mode, add1, array) < m(b_mode, add2, array):
-        array[res] = 1
-    else:
-        array[res] = 0
-    return array
+    def m(self, mode, value, array, r_base):
+        if mode == 1:
+            return value
+        elif mode == 2:
+            return array[r_base + value]
+        else: 
+            return array[value]
 
-def equal_fun(a_mode, b_mode, c_mode, add1, add2, res, array):
-    if m(a_mode, add1, array) == m(b_mode, add2, array):
-        array[res] = 1
-    else:
-        array[res] = 0
-    return array
-
-def run_program(program, p_input):
-    i = 0
-
-    output = 0
-    i_pos = 0
-
-    op_code, a_mode, b_mode, c_mode = parse_cmd(program[i])
-    
-    while op_code != 99:     
-
-        if op_code == 1: #add function
-            program = add_fun(a_mode, b_mode, c_mode, program[i+1],program[i+2],program[i+3], program)
-            i += 4
-
-        elif op_code == 2: #multi function
-            program = multi_fun(a_mode, b_mode, c_mode, program[i+1],program[i+2],program[i+3], program)
-            i += 4
-
-        elif op_code == 3: # Take Input
-            program[program[i+1]] = p_input[i_pos]
-            i_pos += 1
-            i += 2
-
-        elif op_code == 4: # Send Input
-            o_value = m(a_mode, program[i+1], program)
-            output = o_value
-            i += 2
-
-        elif op_code == 5: # Jump if true
-            if m(a_mode, program[i+1], program) != 0:
-                print("jump from:", i, "to: ", m(b_mode, program[i+2], program))
-                i = m(b_mode, program[i+2], program)
-            else: 
-                i += 3
-
-        elif op_code == 6: # Jump if false
-            if m(a_mode, program[i+1], program) == 0:
-                print("jump from:", i, "to: ", m(b_mode, program[i+2], program))
-                i = m(b_mode, program[i+2], program)
-            else: 
-                i += 3
-
-        elif op_code == 7: # less_fun
-            program = less_fun(a_mode, b_mode, c_mode, program[i+1],program[i+2],program[i+3], program)
-            i += 4
-
-        elif op_code == 8: # equal_fun
-            program = equal_fun(a_mode, b_mode, c_mode, program[i+1],program[i+2],program[i+3], program)
-            i += 4
-
-        else:
-            print("Error at position: " + str(i))
-            print("position value: " + str(op_code))
-            return -1
+    def r(self, mode, value, r_base):
+        if mode == 2:
+            return r_base + value
+        else: 
+            return value
         
-        op_code, a_mode, b_mode, c_mode = parse_cmd(program[i])
+    def run(self):
+        p = self.program
+        i = self.i
 
-def parse_cmd(cmd_str):
-    cmd_arr = str(cmd_str)
-    for _ in range(0,5-len(cmd_arr)):
-        cmd_arr = '0' + cmd_arr
+        op_code, a_mode, b_mode, c_mode = self.parse_cmd(p[i])
+        
+        while op_code != 99:     
 
-    return int(cmd_arr[-2] + cmd_arr[-1]), int(cmd_arr[-3]), int(cmd_arr[-4]), int(cmd_arr[-5])
+            if op_code == 1: #add function
+                p[self.r(c_mode, p[i+3], self.r_base)] = self.m(a_mode, p[i+1], p, self.r_base) + self.m(b_mode, p[i+2], p, self.r_base)            
+                i += 4
+
+            elif op_code == 2: #multi function
+                p[self.r(c_mode, p[i+3], self.r_base)] = self.m(a_mode, p[i+1], p, self.r_base) * self.m(b_mode, p[i+2], p, self.r_base)            
+                i += 4
+
+            elif op_code == 3: # Take Input
+                if self.input == []:
+                    return 'null'
+                else:
+                    p[self.r(a_mode, p[i+1], self.r_base)] = self.input.pop()
+                i += 2
+
+            elif op_code == 4: # Send Input
+                self.output = self.m(a_mode, p[i+1], p, self.r_base)
+                i += 2
+
+            elif op_code == 5: # Jump if true
+                if self.m(a_mode, p[i+1], p, self.r_base) != 0:
+                    i = self.m(b_mode, p[i+2], p, self.r_base)
+                else: 
+                    i += 3
+
+            elif op_code == 6: # Jump if false
+                if self.m(a_mode, p[i+1], p, self.r_base) == 0:
+                    i = self.m(b_mode, p[i+2], p, self.r_base)
+                else: 
+                    i += 3
+
+            elif op_code == 7: # less_fun
+                p[self.r(c_mode, p[i+3], self.r_base)] = 1 if self.m(a_mode, p[i+1], p, self.r_base) < self.m(b_mode, p[i+2], p, self.r_base) else 0
+                i += 4
+
+            elif op_code == 8: # equal_fun
+                p[self.r(c_mode, p[i+3], self.r_base)] = 1 if self.m(a_mode, p[i+1], p, self.r_base) == self.m(b_mode, p[i+2], p, self.r_base) else 0
+                i += 4
+
+            elif op_code == 9: # relative base change
+                self.r_base += self.m(a_mode, p[i+1], p, self.r_base)
+                i += 2
+
+            else:
+                print("Error at position: " + str(i))
+                print("position value: " + str(op_code))
+                return -1
+
+            op_code, a_mode, b_mode, c_mode = self.parse_cmd(p[i])
+
+        self.i = -1
 
 def find_max_thruster_signal(input_list, amp_comp):
     max_output = 0
@@ -112,15 +111,15 @@ def find_max_thruster_signal(input_list, amp_comp):
 def run_amps(phase_settings, amp_comp):
     
     amp_out = 0
+    amps = []
     for i in range(0, 5):
-    	clean = copy.copy(amp_code)
-        if i == 0:
-            amp_out = run_program(clean, [phase_settings[0], 0])
-        else:
-            amp_out = run_program(clean, [phase_settings[i], amp_out])
+    	amps.append(Intcode_Computer(amp_code, amp_comp[i]))
 
     return amp_out
 
-amp_code = [3,8,1001,8,10,8,105,1,0,0,21,42,51,76,93,110,191,272,353,434,99999,3,9,1002,9,2,9,1001,9,3,9,1002,9,3,9,1001,9,2,9,4,9,99,3,9,1002,9,3,9,4,9,99,3,9,1002,9,4,9,101,5,9,9,1002,9,3,9,1001,9,4,9,1002,9,5,9,4,9,99,3,9,1002,9,5,9,101,3,9,9,102,5,9,9,4,9,99,3,9,1002,9,5,9,101,5,9,9,1002,9,2,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,101,1,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,101,1,9,9,4,9,99,3,9,1001,9,1,9,4,9,3,9,1001,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,101,1,9,9,4,9,3,9,1002,9,2,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,101,1,9,9,4,9,3,9,101,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,1,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,1,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,101,2,9,9,4,9,3,9,101,1,9,9,4,9,3,9,102,2,9,9,4,9,99]
 
-print(find_max_thruster_signal(inputs, amp_code))
+
+amp_code = [3,8,1001,8,10,8,105,1,0,0,21,42,51,76,93,110,191,272,353,434,99999,3,9,1002,9,2,9,1001,9,3,9,1002,9,3,9,1001,9,2,9,4,9,99,3,9,1002,9,3,9,4,9,99,3,9,1002,9,4,9,101,5,9,9,1002,9,3,9,1001,9,4,9,1002,9,5,9,4,9,99,3,9,1002,9,5,9,101,3,9,9,102,5,9,9,4,9,99,3,9,1002,9,5,9,101,5,9,9,1002,9,2,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,101,1,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,101,1,9,9,4,9,99,3,9,1001,9,1,9,4,9,3,9,1001,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,101,1,9,9,4,9,3,9,1002,9,2,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,101,1,9,9,4,9,3,9,101,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,1,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,1,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,101,2,9,9,4,9,3,9,101,1,9,9,4,9,3,9,102,2,9,9,4,9,99]
+amp = Intcode_Computer(amp_code, [0,0])
+amp.run()
+print()

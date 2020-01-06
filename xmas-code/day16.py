@@ -1,25 +1,25 @@
-#f = open("input.txt")
-puzzle_input = '59728776137831964407973962002190906766322659303479564518502254685706025795824872901465838782474078135479504351754597318603898249365886373257507600323820091333924823533976723324070520961217627430323336204524247721593859226704485849491418129908885940064664115882392043975997862502832791753443475733972832341211432322108298512512553114533929906718683734211778737511609226184538973092804715035096933160826733751936056316586618837326144846607181591957802127283758478256860673616576061374687104534470102346796536051507583471850382678959394486801952841777641763547422116981527264877636892414006855332078225310912793451227305425976335026620670455240087933409'
+f = open("input.txt")
+puzzle_input = f.readline()
 
 def fft_algorithm(signal, pattern):
-    s_out = ""
-    for j in range(len(signal)):
-        lp = gen_pattern(pattern, j)
-        s_sum = 0
-        for k in range(len(signal)):
-            s_sum += int(signal[k])*lp[(k+1)%len(lp)]
-        s_out += str(s_sum % 10) if s_sum >= 0 else str(s_sum * -1 % 10)
-    return s_out
+	s_out = ""
+	for j in range(len(signal)):
+		lp = gen_pattern(pattern, j)
+		s_sum = 0
+		for k in signal:
+			s_sum += (int(k)*lp[j+1%len(lp)])
+		s_out += s_sum % 10 if s_sum >= 0 else s_sum * -1 % 10
 
 
 def gen_pattern(pattern, digit):
-    out_pattern = []
-    for j in pattern:
-        out_pattern += [j] * (digit+1)
-    return out_pattern
+	out_pattern = []
+	for j in pattern:
+		out_pattern += [j] * (digit+1)
 
-solution = puzzle_input
-for i in range(100):
-    solution = fft_algorithm(solution, [0, 1, 0, -1])
+	return out_pattern
+
+solution = 0
+for i in range(1):
+	solution = fft_algorithm(puzzle_input, [0, 1, 0, -1])
 
 print(solution)
