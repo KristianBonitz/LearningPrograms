@@ -10,14 +10,11 @@ def get_all_keys(maze, start, key_loc, obt_keys):
     shortest_lenght = 987654
     for key in key_loc:
         if key[0] not in obt_keys:
-            print(key[0], obt_keys)
             if len(obt_keys) + 1 == len(key_loc):
-                #print(start, key, obt_keys, get_path(maze, start, key[1], obt_keys, []))
-                return get_path(maze, start, key[1], obt_keys, [])
+                return len(a_star(maze, start, key[1], obt_keys, heur))
             else:
-                #print(start, key, obt_keys, get_path(maze, start, key[1], obt_keys, []))
-                path_lenght = get_path(maze, start, key[1], obt_keys, []) 
-                if path_lenght < 100:
+                path_lenght = len(a_star(maze, start, key[1], obt_keys, heur))
+                if path_lenght > 0: #then vaild
                     path_lenght += get_all_keys(maze, key[1], key_loc, obt_keys + [key[0]])
                     if path_lenght < shortest_lenght:
                         shortest_lenght = path_lenght   
@@ -46,21 +43,68 @@ def get_all_keys_depth(maze, start, key_loc, obt_keys, p_len=0, s_len=9999):
 
     return s_len 
 
-def get_path(maze, start, end, keys, history):
+def get_path(maze, start, distance, keys, history, paths):
     shortest_lenght = 333
     for move in get_moves(maze, start, keys):
         if move not in history:
-            if move == end:
-                return 1
-            else:
-                path_lenght = 1 + get_path(maze, move, end, keys, history + [move])
-                if path_lenght < shortest_lenght:
-                    shortest_lenght = path_lenght   
-    return shortest_lenght
+            paths.append(get_path(maze, move, distance+1, keys, history + [move], paths + [move, distance + 1]))
+
+        print(history)
+    return paths
+
+def heur(point, goal):
+    return abs(point[0] - goal[0]) + abs(point[1] - goal[1])
+
+def lowest_point(open_set, fScore):
+    lowest = open_set[0]
+
+    for point in open_set:
+        if fScore[lowest[1]][lowest[0]] > fScore[point[1]][point[0]]:
+            lowest = point
+
+    return open_set[0]
+
+def reconstruct_path(came_from, current):
+    total_path = []
+    while came_from[current[1]][current[0]] != []:
+        total_path.append(current)
+        current = came_from[current[1]][current[0]]
+
+    return total_path
+
+def a_star(maze, start, goal, keys, h):
+    open_set = [start]
+    came_from = [[[] for j in i] for i in maze]
+
+    gScore = [[100000 for j in i] for i in maze]
+    gScore[start[1]][start[0]] = 0
+
+    fScore = [[100000 for j in i] for i in maze]
+    fScore[start[1]][start[0]] = h(start, goal)
+
+    while open_set != []:
+        current = lowest_point(open_set, fScore)
+
+        if current == goal:
+            return reconstruct_path(came_from, current)
+
+        open_set.remove(current)
+        for move in get_moves(maze, current, keys):
+            tentative_gScore = gScore[current[1]][current[0]] + 1
+            if tentative_gScore < gScore[move[1]][move[0]]:
+                came_from[move[1]][move[0]] = current
+                gScore[move[1]][move[0]] = tentative_gScore
+                fScore[move[1]][move[0]] = gScore[move[1]][move[0]] + h(move, goal)
+                if move not in open_set:
+                    open_set.append(move)
+
+
+    return []
+
 
 def get_moves(maze, point, keys):
     valid = []
-    for i in range(-1, 2):
+    for i in [-1, 1]:
         if vaild_move(maze[point[1] + i][point[0]], keys):
             valid.append([point[0], point[1] + i])
 
@@ -99,6 +143,7 @@ def get_start_point(maze):
 
 f = open("input.txt")
 puzzle_input = [j.strip() for i, j in enumerate(f)]
-
-print(get_all_keys_depth(puzzle_input, get_start_point(puzzle_input),get_key_locations(puzzle_input),[]))
+#print(get_path(puzzle_input, get_start_point(puzzle_input), 0, [], [], []))
+#print(a_star(puzzle_input, get_start_point(puzzle_input), get_key_locations(puzzle_input)[0][1], [], heur))
+print(get_all_keys(puzzle_input, get_start_point(puzzle_input),get_key_locations(puzzle_input),[]))
 #print(get_path(puzzle_input, get_start_point(puzzle_input), get_key_locations(puzzle_input)[2][1], [], []))
