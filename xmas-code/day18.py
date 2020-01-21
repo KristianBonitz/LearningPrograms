@@ -1,11 +1,12 @@
 class Maze(object):
-    def __init__(self, maze):
+    def __init__(self, maze, start, keys):
         super(Maze, self).__init__()
         self.maze = maze
-        self.starting_point = get_start_point(maze)
-        self.maze_keys = get_key_locations(maze)
-        self.obt_keys = []
-    
+        self.start = start
+        self.keys = sorted(keys)
+
+all_mazes = []
+# https://www.blog.pythonlibrary.org/2016/02/25/python-an-intro-to-caching/
 def get_all_keys(maze, start, key_loc, obt_keys, b_len=0, m_len=99999):
     if len(key_loc) == len(obt_keys):
         return 0
@@ -80,17 +81,13 @@ def lowest_point(open_set, fScore):
 
     return open_set[0]
 
-def reconstruct_path(came_from, current):
-    total_path = []
-    while came_from[current[1]][current[0]] != []:
-        total_path.append(current)
-        current = came_from[current[1]][current[0]]
+def a_star(maze, start,keys):
+    for saved_maze in all_mazes:
+        if saved_maze.start == start and saved_maze.keys == sorted(keys):
+            print("cache save", len(all_mazes))
+            return saved_maze.maze
 
-    return total_path
-
-def a_star(maze, start, keys):
     open_set = [start]
-    came_from = [[[] for j in i] for i in maze]
 
     gScore = [[100000 for j in i] for i in maze]
     gScore[start[1]][start[0]] = 0
@@ -102,10 +99,11 @@ def a_star(maze, start, keys):
         for move in get_moves(maze, current, keys):
             tentative_gScore = gScore[current[1]][current[0]] + 1
             if tentative_gScore < gScore[move[1]][move[0]]:
-                came_from[move[1]][move[0]] = current
                 gScore[move[1]][move[0]] = tentative_gScore
                 if move not in open_set:
                     open_set.append(move)
+
+    all_mazes.append(Maze(gScore,start,keys))
 
     return gScore
 
