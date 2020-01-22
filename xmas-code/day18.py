@@ -1,18 +1,47 @@
+
+import datetime 
+
+start_prog = datetime.datetime.now()
+
 class Maze(object):
     def __init__(self, maze, start, keys):
         super(Maze, self).__init__()
         self.maze = maze
         self.start = start
-        self.keys = sorted(keys)
+        self.date_accessed = datetime.datetime.now()
 
-all_mazes = []
-# https://www.blog.pythonlibrary.org/2016/02/25/python-an-intro-to-caching/
+class Maze_Cache(object):
+    def __init__(self, limit):
+        self.cache = []
+        self.cache_limit = limit
+
+    def search(self, start, keys):
+        for maze in self.cache:
+            if maze.start == start:
+                maze.date_accessed = datetime.datetime.now()
+                return maze.maze
+        return []
+
+    def add(self, maze_obj):
+        if len(self.cache) >= self.cache_limit:
+            self.remove_oldest()
+
+        self.cache.append(maze_obj)
+
+    def remove_oldest(self):
+        oldest_entry = None
+        for key in self.cache:
+            if oldest_entry is None:
+                oldest_entry = key
+            elif key.date_accessed < oldest_entry.date_accessed:
+                oldest_entry = key
+        self.cache.remove(oldest_entry)
+
+all_mazes = Maze_Cache(32)
+
 def get_all_keys(maze, start, key_loc, obt_keys, b_len=0, m_len=99999):
     if len(key_loc) == len(obt_keys):
         return 0
-
-    if len(obt_keys) < 1:
-        print(m_len)
 
     shortest_lenght = 987654
     d = a_star(maze, start, obt_keys)
@@ -82,10 +111,10 @@ def lowest_point(open_set, fScore):
     return open_set[0]
 
 def a_star(maze, start,keys):
-    for saved_maze in all_mazes:
-        if saved_maze.start == start and saved_maze.keys == sorted(keys):
-            print("cache save", len(all_mazes))
-            return saved_maze.maze
+    start_time = datetime.datetime.now()
+    cached_value = all_mazes.search(start, keys)
+    if cached_value != []:
+        return cached_value
 
     open_set = [start]
 
@@ -102,8 +131,6 @@ def a_star(maze, start,keys):
                 gScore[move[1]][move[0]] = tentative_gScore
                 if move not in open_set:
                     open_set.append(move)
-
-    all_mazes.append(Maze(gScore,start,keys))
 
     return gScore
 
@@ -148,7 +175,19 @@ def get_start_point(maze):
 
 f = open("input.txt")
 puzzle_input = [j.strip() for i, j in enumerate(f)]
+all_mazes = Maze_Cache(0)
+
+def find_best_cache():
+    best = datetime.datetime.now()
+    for x in range(30,40):
+        start = datetime.datetime.now()
+        all_mazes = Maze_Cache(200)
+        get_all_keys(puzzle_input, get_start_point(puzzle_input),get_key_locations(puzzle_input),[])
+        print("cache size:", x, "exe time:", datetime.datetime.now() - start)
+
+find_best_cache()
+
+
 #print(get_path(puzzle_input, get_start_point(puzzle_input), 0, [], [], []))
 #print(a_star(puzzle_input, get_start_point(puzzle_input), get_key_locations(puzzle_input)[0][1], [], heur))
-print(get_all_keys(puzzle_input, get_start_point(puzzle_input),get_key_locations(puzzle_input),[]))
 #print(get_path(puzzle_input, get_start_point(puzzle_input), get_key_locations(puzzle_input)[2][1], [], []))
